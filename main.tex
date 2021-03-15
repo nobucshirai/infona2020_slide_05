@@ -1,0 +1,642 @@
+% [Overleaf] https://www.overleaf.com/read/bcgxqjyzcqgp
+% [YouTube] https://youtu.be/9scwZmGZUeU
+% [GitHub] https://github.com/nobucshirai/infona2020_slide_05
+\documentclass[dvipdfmx,aspectratio=169,20pt]{beamer}
+\usepackage{bxdpx-beamer}
+
+% Beamer theme
+\usetheme{Boadilla}
+
+%%%%% JAPANESE FONT SETTINGS %%%%%
+\usepackage[utf8]{inputenc}
+\usepackage{pxjahyper}
+\renewcommand{\kanjifamilydefault}{\gtdefault} % for Gothic Japanese fonts
+\newcommand{\myfontsetting}[3]{{\fontsize{#1}{#2}\selectfont #3}}
+\usepackage[deluxe,uplatex]{otf} % needed to use super bold Japanese fonts
+\usepackage[unicode,noto-otc]{pxchfon} % needed to use super bold Japanese fonts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% SETTINGS FOR MATH SYMBOLS %%%%%
+\usepackage{amsmath,amssymb}
+\usepackage{bm}
+%\usepackage{graphicx}
+\usepackage{latexsym}
+\usefonttheme{professionalfonts} % use Serif fonts for equations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{fancybox,ascmac}
+\usepackage{url}
+\usepackage[many]{tcolorbox}
+
+%%%%% ALGORITHM SETTING %%%%%
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\algsetup{linenosize=\color{fg!50}\fontsize{8pt}{8pt}\selectfont}
+\renewcommand\algorithmicdo{\bfseries :}
+\renewcommand\algorithmicthen{\bfseries :}
+\renewcommand\algorithmicrequire{\textbf{Input:}}
+\renewcommand\algorithmicensure{\textbf{Output:}}
+\renewcommand{\algorithmicprint}{\textbf{break}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{myblue1}{RGB}{45,130,200}
+\definecolor{myblue2}{RGB}{26,89,142}
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor*{structure}{fg=myblue1,bg=blue}
+\setbeamercolor{block title}{fg=myblue1!50!black}
+\setbeamercolor*{block title example}{fg=white,bg=myblue2}
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+\setbeamercolor*{palette quaternary}{fg=black,bg=myblue1}
+
+\setbeamerfont{alerted text}{series=\bfseries}
+\setbeamerfont{section in toc}{series=\mdseries}
+\setbeamerfont{frametitle}{size=\Large,series=\bfseries}
+\setbeamerfont{title}{size=\LARGE,series=\bfseries}
+\setbeamerfont{date}{size=\small}
+
+\setbeamertemplate{block title}[shadow=false]
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%%%%% BEAMER FOOTLINE SETTINGS %%%%%%
+\setbeamertemplate{footline}[frame number]{}
+\setbeamerfont{footline}{size=\bf\footnotesize\small}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% BEAMER ITEM SETTINGS %%%%%
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[triangle]
+\setbeamertemplate{enumerate item}[circle]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+%%%%% START_TAG B %%%%%
+%\noindent{\bf I\hspace{-.1em}V-B.}
+\frametitle{[問題] I\hspace{-.1em}V-B}
+\myfontsetting{16pt}{18pt}{
+ニュートン法により
+}
+\myfontsetting{14pt}{16pt}{
+$f(x)=2-e^{x}$
+}
+\myfontsetting{16pt}{18pt}{
+の根を求めるプログラムを初期値を $x=1$ として作成し、根の真値を有効数字10進16桁まで示した
+}
+\myfontsetting{14pt}{16pt}{
+$\alpha=0.6931471805599453$
+}
+\myfontsetting{16pt}{18pt}{
+と比べて絶対誤差が $10^{-8}$ 以下となる最低の反復回数 $n$ を求めよ。
+また $n$ 回反復した時の根の近似値と絶対誤差も求めよ。近似値は有効数字10進11桁以降を切り捨てて求め、絶対誤差は有効数字10進4桁以降を切り捨ててよ。
+}\\
+\myfontsetting{12pt}{14pt}{
+作成したプログラムも提出すること。プログラミング言語は問わない。
+}
+%%%%% END_TAG B %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[略解] I\hspace{-.1em}V-B}
+\vspace{-0.5cm}
+プログラムを実行することにより $n=4$ であることがわかる。
+\vspace{0.5cm}
+
+また根の近似値は 0.6931471805
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%タイトルページ
+
+\title{{\Large 連立一次方程式の数値解法}}
+\titlegraphic{\vspace{-7mm}\flushright\includegraphics[width=1.8cm,height=1.8cm]{hattari_kun_good_org.eps}}
+
+\setbeamertemplate{title page}{%
+    \begin{flushright}
+        \usebeamercolor[fg]{titlegraphic}\inserttitlegraphic
+    \end{flushright}
+    \vspace{-0.6cm}
+    \hspace{1.5cm}{\selectfont\usebeamerfont{subtitle} \usebeamercolor[fg]{subtitle} [\href{https://youtu.be/9scwZmGZUeU}{数値解析 第5回}] \par}
+    \vspace{0.5cm}
+    %\vspace{2.5em}
+    {\centering\usebeamerfont{title} \usebeamercolor[fg]{title} \inserttitle \par}
+    \vspace{0.5cm}
+    \begin{center}
+        速く解くための下準備
+    \end{center}
+}
+
+\date[\todey]{}
+
+\frame{\titlepage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{連立一次方程式 {\small (Linear systems)}}
+
+\begin{itemize}
+    \item \myfontsetting{16pt}{16pt}{$n$ 本の一次方程式が与えられた時に未知数 $x_1$, $x_2$, $\dots$, $x_n$ の値を求める問題} \myfontsetting{12pt}{12pt}{({\bf n元連立一次方程式})}
+%\vspace{-8mm}
+    \item[] \myfontsetting{14pt}{14pt}{
+%\begin{center}
+\[
+\begin{cases}
+a_{11}x_1 + a_{12}x_2 + \cdots + a_{1n}x_n = b_1\\
+a_{21}x_1 + a_{22}x_2 + \cdots + a_{2n}x_n = b_2\\
+\hspace{5cm}\vdots\\
+a_{n1}x_1 + a_{n2}x_2 + \cdots + a_{nn}x_n = b_n
+\end{cases}
+\]
+%\end{center}
+}
+
+\vspace{-2mm}
+
+%\begin{itemize}
+    \begin{itemize}
+        \item \myfontsetting{10pt}{10pt}{$n=2$ の場合は平面上で2本の直線の交点を求める問題}
+\vspace{-2mm}
+        \item \myfontsetting{10pt}{10pt}{$n=3$ の場合は3次元空間中の3つの平面の交点を求める問題}
+\vspace{-2mm}
+        \item \myfontsetting{10pt}{10pt}{一般の $n$ では $n$ 次元空間中の $n-1$ 個の $n-1$ 次元面の交点を求める問題}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large 連立一次方程式の行列表示}}
+
+\begin{itemize}
+    \setlength{\itemsep}{0.5cm}
+    \item \myfontsetting{16pt}{16pt}{連立一次方程式は{\bf 係数行列} $A$ を用いると $A\bm{x} = \bm{b}$ と書ける}
+\end{itemize}
+
+\vspace{-2mm}
+\myfontsetting{14pt}{14pt}{
+\begin{equation*}
+    A = \begin{bmatrix}
+        a_{11} & a_{12} & \cdots & a_{1n}\\
+        a_{21} & a_{22} & \cdots & a_{2n}\\
+        \vdots & \vdots & \ddots & \vdots\\
+        a_{n1} & a_{n2} & \cdots & a_{nn}
+    \end{bmatrix},\ 
+    \bm{b} = \begin{bmatrix}
+    b_1\\ b_2\\ \vdots\\b_n
+    \end{bmatrix},\ 
+    \bm{x} = \begin{bmatrix}
+    x_1\\ x_2\\ \vdots\\x_n
+    \end{bmatrix}
+\end{equation*}
+}
+\vspace{-2mm}
+
+\begin{itemize}
+    %\setlength{\itemsep}{0.5cm}
+    \item \myfontsetting{16pt}{16pt}{$A$ が{\bf 正則である}\myfontsetting{10pt}{10pt}{(逆行列を持つ)}とき解は一意に定まり、$A$ の逆行列を用いて $\bm{x}=A^{-1}\bm{b}$ と表せる}
+    \begin{itemize}
+        \item \myfontsetting{14pt}{14pt}{しかし $A^{-1}$ を求める手法は遅いので使わない\myfontsetting{8pt}{8pt}{(定数倍だけど)}}
+    \end{itemize}
+\end{itemize}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large 連立一次方程式の数値解法}}
+
+\begin{itemize}
+    \setlength{\itemsep}{0.5cm}
+    \item {\bf 直接法} \myfontsetting{12pt}{12pt}{(解を手堅く確実に求める)}
+    \begin{itemize}
+        \item [手法] ガウスの消去法、{\bf LU分解}
+        %\item [長所] 入力データや計算途中で混入した誤差が拡大しない安定な方法
+        \item [用途] $\mathcal{O}(n^3)$ \myfontsetting{12pt}{12pt}{($A\in \mathbb{R}^{n\times n}$)} の計算量に耐えられる問題に用いられる
+    \end{itemize}
+    \item {\bf 反復法} \myfontsetting{12pt}{12pt}{(解にだんだん近づけていく)}
+    \begin{itemize}
+        \item [手法] {\bf ガウス-ザイデル法}、SOR法、共役勾配法% (CG法)
+        %\item [長所] 疎行列の場合記憶領域を節約できる (安い)
+        \item [用途] 記憶領域を節約できる\myfontsetting{12pt}{12pt}{(安い)}ため大規模疎行列に用いられる
+    \end{itemize}
+\end{itemize}
+
+\vspace{-2mm}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[問題] V-A}
+
+%%%%% START_TAG A %%%%%
+%\noindent{\bf [V. 連立一次方程式の数値解法]}%RETURN
+
+%\noindent{\bf V-A.}
+\myfontsetting{10pt}{10pt}{
+$5 \times 5$ の行列 $A$ および5次元の縦ベクトル $\bm{b}$ がそれぞれ以下のように与えられたとする。
+}
+
+\vspace{2mm}
+\myfontsetting{12pt}{12pt}{
+\begin{equation*}
+    A = \begin{bmatrix}
+    14 & 14 & -9 &  3 & -5\\
+    14 & 52 &-15 &  2 &-32\\
+    -9 &-15 & 36 & -5 & 16\\
+     3 &  2 & -5 & 47 & 49\\
+    -5 &-32 & 16 & 49 & 79
+    \end{bmatrix},\ 
+    \bm{b} = \begin{bmatrix}
+    -15\\
+    -100\\
+    106\\
+    329\\
+    463
+    \end{bmatrix}.
+\end{equation*}
+}
+\vspace{-4mm}
+
+\noindent \myfontsetting{10pt}{10pt}{
+この時行列 $A$ に対してLU分解および前進代入・後退代入を行うプログラムを作成し連立一次方程式 $A\bm{x}=\bm{b}$ の解 $\bm{x}=[x_1, x_2, x_3, x_4, x_5]^\mathsf{T}$ を有効数字10進3桁まで求め4桁を四捨五入して答えよ。
+}\\
+\myfontsetting{10pt}{10pt}{
+作成したプログラムも提出すること。プログラミング言語は問わない。
+}
+%%%%% END_TAG A %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{[略解] V-A}
+%\vspace{-0.5cm}
+\begin{equation*}
+    \bm{x} = \begin{bmatrix}
+    3.17\times 10^{-14}\\
+    1.00\\
+    2.00\\
+    3.00\\
+    4.00
+    \end{bmatrix}
+\end{equation*}
+
+1つ目の要素はほぼ $0$
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{{\large [手法] 速く解くための下準備}}
+\begin{block}{{\bf\small LU分解} \myfontsetting{13pt}{18pt}{(ピボット選択なし)}\\
+\vspace{-5mm}
+\myfontsetting{13pt}{18pt}{LU factorization (no pivoting)}}
+    \myfontsetting{12pt}{14pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $A$
+        \ENSURE $L$, $A$ \hspace{2mm} \myfontsetting{8pt}{8pt}{[$A$ は実行後 $U$ になる]}
+        \STATE $L \leftarrow I$
+        \FOR{$k = 1,2, \dots, n-1$}
+        \FOR{$i = k+1,k+2, \dots, n$}
+        \STATE $m_{ik} \leftarrow a_{ik}/a_{kk}$ \hspace{2mm} \myfontsetting{8pt}{8pt}{[$a_{kk}\neq 0$ を仮定]}
+        \STATE $a_{ik} \leftarrow 0$
+        \FOR{$j = k+1,k+2, \dots, n$}
+        \STATE $a_{ij} \leftarrow a_{ij} - m_{ik}a_{kj}$
+        \ENDFOR
+        \STATE $l_{ik} \leftarrow m_{ik}$
+        \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [手法解説]}}
+\begin{block}{{\bf LU分解} {\small (LU factorization)}}
+\myfontsetting{16pt}{20pt}{正則行列 $A$ が与えられた時、$A$ を下三角行列 $L$ と上三角行列 $U$ を用いて $A=LU$ のように変形する手法。}
+\end{block}
+\myfontsetting{14pt}{16pt}{
+\begin{itemize}
+    \setlength{\itemsep}{2.5mm}
+    \item {\bf ガウスの消去法}に現れる行の基本変形の操作を行列 $L$ に記録したものと同じ
+    \item $A=LU$ と変形することで元の $A\bm{x}=\bm{b}$ という問題を $L\bm{y}=\bm{b}$, $U\bm{x}=\bm{y}$ という簡単な2つの問題に直す
+    \item 乗算の回数は $A\in\mathbb{R}^{n\times n}$ とした時 $\frac{1}{3}n^3+\mathcal{O}(n^2)$ となる
+\end{itemize}
+}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{{\large [手法] 下準備の後の仕上げ}}
+\begin{block}{{\bf\small 前進代入}\myfontsetting{10pt}{12pt}{($\ell\ell$.~1--6)}{\bf\small ・後退代入}\myfontsetting{10pt}{12pt}{($\ell\ell$.~7--12)}}
+    \myfontsetting{10pt}{12pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $L$, $U$, $\bm{b}$
+        \ENSURE $\bm{x}$
+        \STATE $y_1 \leftarrow b_1$ 
+        \FOR{$i = 2, \dots, n$}
+        \STATE $sum \leftarrow 0$
+        \FOR{$j = 1,2, \dots, i-1$}
+        \STATE $sum \leftarrow sum + l_{ij}y_j$
+        \ENDFOR
+        \STATE $y_i \leftarrow b_i - sum$
+        \ENDFOR
+        \STATE $x_n\leftarrow y_n/u_{ii}$
+        \FOR{$i=n-1,\dots,1$}
+        \STATE $sum \leftarrow 0$
+        \FOR{$j=i+1,i+2,\dots,n$}
+        \STATE $sum \leftarrow sum + u_{ij}x_j$
+        \ENDFOR
+        \STATE $x_i \leftarrow \left(y_i - sum \right)/u_{nn}$
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [手法解説]}}
+\begin{block}{\myfontsetting{20pt}{20pt}{\bf 前進代入・後退代入}
+%\vspace{-5mm}
+\myfontsetting{12pt}{12pt}{(forward substitution/backward substitution)}}
+\myfontsetting{15pt}{15pt}{
+$L\bm{y}=\bm{b}$ から $\bm{y}$ を求めるのが{\bf 前進代入}、求めた $\bm{y}$ を使って $U\bm{x}=\bm{y}$ から $\bm{x}$ を求めるのが{\bf 後退代入}
+}
+\end{block}
+\begin{itemize}
+    %\setlength{\itemsep}{0.5cm}
+    \item \myfontsetting{15pt}{15pt}{乗算の回数はどちらも $\frac{1}{2}n^2+\mathcal{O}(n)$ \myfontsetting{12pt}{12pt}{($A\in \mathbb{R}^{n\times n}$)} となる}
+    \begin{itemize}
+        \item \myfontsetting{15pt}{15pt}{前進代入と後退代入で合わせて $n^2+\mathcal{O}(n)$}
+        \item \myfontsetting{15pt}{15pt}{LU分解の $\frac{1}{3}n^3+\mathcal{O}(n^2)$ に比べれば小さい}
+        \item \myfontsetting{15pt}{15pt}{同じ $A$ で異なる $\bm{b}$ が与えられた時はLU分解済みの場合 $n^2+\mathcal{O}(n)$ で解が求まる}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [補足] ピボット選択の導入}}
+
+\begin{itemize}
+    \setlength{\itemsep}{0.2cm}
+    \item \myfontsetting{18pt}{18pt}{\bf 動機}
+    \begin{itemize}
+        \item \myfontsetting{15pt}{15pt}{LU分解のアルゴリズムで示した $a_{kk}\neq 0$ の仮定を取り除き、さらに丸め誤差の影響をより小さくしたい}
+    \end{itemize}
+    \item \myfontsetting{18pt}{18pt}{\bf 方法の概要}
+    \begin{itemize}
+        \item \myfontsetting{15pt}{15pt}{$k$ \myfontsetting{10pt}{10pt}{(一番外側のループのループ制御変数)} の値が $\kappa$ であるとき、$\kappa$ 行目にある $a_{\kappa\kappa},\dots, a_{n\kappa}$ の成分から絶対値が最大のものを探し、その成分を含む行を $p$ 行目とする}
+        \item \myfontsetting{15pt}{15pt}{$A$ の $\kappa$ 行目と $p$ 行目の成分をすべて入れ替える \myfontsetting{10pt}{10pt}{(ピボットとする行を $\kappa$ 行から $p$ 行に入れ替える)}}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [補足] 乗除算の回数で計算量を比べる}}
+
+\vspace{2.5mm}
+\myfontsetting{15pt}{15pt}{
+\begin{itemize}
+    \setlength{\itemsep}{0.1cm}
+    \item {\bf LU分解}
+    \begin{itemize}
+        \item \myfontsetting{12pt}{12pt}{ $\displaystyle\sum^{n-1}_{k=1}\sum^{n}_{i=k+1}\sum^{n}_{j=k+1}1=\frac{1}{3}n^3+\mathcal{O}(n^2)$}
+        \begin{itemize}
+            \item \myfontsetting{12pt}{12pt}{逆行列 $A^{-1}$ を求める場合は $n^3+\mathcal{O}(n^2)$ かかる}
+        \end{itemize}
+    \end{itemize}
+    \item {\bf 前進代入}
+    \begin{itemize}
+        \item \myfontsetting{12pt}{12pt}{ $\displaystyle\sum^{n}_{i=1}\sum^{i-1}_{j=1} 1=\frac{1}{2}n^2+\mathcal{O}(n)$}
+    \end{itemize}
+    \item {\bf 後退代入}
+    \begin{itemize}
+        \item \myfontsetting{12pt}{12pt}{$\displaystyle\sum^{n}_{i=1}\sum^{n}_{j=i+1} 1=\frac{1}{2}n^2+\mathcal{O}(n)$}
+    \end{itemize}
+\end{itemize}
+}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [補足] 連立一次方程式における残差}}
+\begin{itemize}
+    \setlength{\itemsep}{0.2cm}
+    \item \myfontsetting{18pt}{18pt}{{\bf 残差} \myfontsetting{12pt}{12pt}{(residual; 近似値の旨さを測る指標)} の連立一次方程式での定義}
+    \vspace{0.2cm}
+    \begin{itemize}
+        \setlength{\itemsep}{0.2cm}
+        \item [問題設定] $A\bm{x}=\bm{b}$ の近似解 $\tilde{\bm{x}}$ が得られた場合
+        \item [定義] $\bm{r}\equiv\bm{b}-A\tilde{\bm{x}}$
+        \item [考え方] \myfontsetting{15pt}{15pt}{$\bm{r}$ の長さ $||\bm{r}||_2=\sqrt{r_1^2+\cdots+r_n^2}$ が小さいほど良い近似であると考えられる}
+        \item [使い方1]
+        \myfontsetting{15pt}{15pt}{$||\bm{r}||_2$ を計算すれば近似解の相対的な旨さが測れる
+        }
+        \item [使い方2]
+        \myfontsetting{15pt}{15pt}{{\bf 反復改良}に使える}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [補足] 反復改良}}
+\begin{itemize}
+    \item \myfontsetting{18pt}{18pt}{近似解 $\tilde{\bm{x}}^{(0)}$ から計算できる残差を $\bm{r}^{(0)}$ $(=\bm{b}-A\tilde{\bm{x}}^{(0)})$ とおく
+    }
+    %\item \myfontsetting{18pt}{18pt}{$\bm{r}^{(0)}=\bm{b}-A\tilde{\bm{x}}^{(0)}$ の両辺に左から $A^{-1}$ を書けると $A^{-1}\bm{r}^{(0)}=A^{-1}\bm{b}-\tilde{\bm{x}}^{(0)}=\bm{x}-\tilde{\bm{x}}^{(0)}$ となる }
+    %\begin{itemize}
+    %    \item ここで $\bm{x}=A^{-1}\bm{b}$
+    %\end{itemize}
+    \item \myfontsetting{18pt}{18pt}{
+    $A\bm{y}^{(0)} = \bm{r}^{(0)}$ を解いて得られる $\bm{y}^{(0)}$ を用いて新たな近似解 $\tilde{\bm{x}}^{(1)}=\tilde{\bm{x}}^{(0)}+\bm{y}^{(0)}$ とおく
+    }
+    \begin{itemize}
+        \item $A$ のLU分解が完了している場合、$\frac{1}{2}n^2$ で $\bm{y}^{(0)}$ が求まる
+    \end{itemize}
+    \item $\tilde{\bm{x}}^{(i+1)}=\tilde{\bm{x}}^{(i)}+\bm{y}^{(i)}$ を繰り返す
+\end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [道具] 定評のあるライブラリを使おう}}
+\begin{itemize}
+    \item 汎用性が高い数値計算手法の多くはライブラリが存在する
+    \begin{itemize}
+        \item {\bf プロ}の手によって実装されている
+        \item よく{\bf 検証}されている
+        \item 自分で実装するよりも{\bf 高速で正確}
+        \item 自分で実装する場合も既存のライブラリの結果と{\bf 整合性が取れているかを確認}すべし
+    \end{itemize}
+    \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{{\large [道具] 線形代数ライブラリ例}}
+
+%\myfontsetting{15pt}{18pt}{
+\begin{itemize}
+    \setlength{\itemsep}{2.5mm}
+    \item {\bf BLAS} (Basic Linear Algebra Subprograms) 
+    \begin{itemize}
+        \item 行列とベクトルに対する基本的な線形代数の操作を行うライブラリ
+    \end{itemize}
+    \item {\bf LAPACK} (Linear Algebra Package)
+    \begin{itemize}
+        \item 連立一次方程式の数値解法、QR分解、特異値分解、固有値問題の数値解法
+    \end{itemize}
+    \item FORTRANで実装されておりFORTRANやC/C++, Pythonなどで使用可能
+\end{itemize}
+%}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+%%%%% PASTE_START_TAG B %%%%%
+\frametitle{[問題] V-B}
+%\noindent{\bf V-B.}
+
+\myfontsetting{10pt}{10pt}{
+$5 \times 5$ の行列 $A$ および5次元の縦ベクトル $\bm{b}$ がそれぞれ以下のように与えられたとする。
+}
+
+\vspace{2mm}
+\myfontsetting{12pt}{12pt}{
+\begin{equation*}
+    A = \begin{bmatrix}
+    14 & 14 & -9 &  3 & -5\\
+    14 & 52 &-15 &  2 &-32\\
+    -9 &-15 & 36 & -5 & 16\\
+     3 &  2 & -5 & 47 & 49\\
+    -5 &-32 & 16 & 49 & 79
+    \end{bmatrix},\ 
+    \bm{b} = \begin{bmatrix}
+    -15\\
+    -100\\
+    106\\
+    329\\
+    463
+    \end{bmatrix}.
+\end{equation*}
+}
+\vspace{-4mm}
+
+\noindent\myfontsetting{10pt}{10pt}{
+この時行列 $A$ に対してガウス-ザイデル法を実行するプログラムを作成し連立一次方程式 $A\bm{x}=\bm{b}$ の解 $\bm{x}=[x_1, x_2, x_3, x_4, x_5]^\mathsf{T}$ を有効数字10進3桁まで求め4桁を四捨五入して答えよ。
+}\\
+\myfontsetting{10pt}{10pt}{
+作成したプログラムも提出すること。プログラミング言語は問わない。
+}
+%%%%% PASTE_END_TAG B %%%%%
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{{\large [手法] 疎行列を扱うための安い方法}}
+\begin{block}{{\bf\small ガウス-ザイデル法} \myfontsetting{13pt}{18pt}{(Gauss-Seidel iteration)}}
+    \myfontsetting{12pt}{14pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $A$, $k_\mathrm{max}$, $\bm{x}$ \myfontsetting{8pt}{8pt}{(初期ベクトル)} 
+        \ENSURE $\bm{x}$
+        \FOR{$k = 1,2, \dots, k_\mathrm{max}$}
+        \FOR{$i = 1,\dots, n$}
+        \STATE $sum = 0$
+        \FOR{$j = 1,\dots, i-1$}
+        \STATE $sum \leftarrow sum + a_{ij}x_j$
+        \ENDFOR
+        \FOR{$j = i+1, \dots, n$}
+        \STATE $sum \leftarrow sum + a_{ij}x_j$
+        \ENDFOR
+        \STATE $x_i = (-sum +b_i)/a_{ii}$
+        \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+
+\vspace{10mm}
+
+\begin{center}
+    \myfontsetting{36pt}{36pt}{\bf \color{myblue1} おまけ}
+    
+    \vspace{5mm}
+    \myfontsetting{15pt}{15pt}{※ 配列のインデックスが0から始まるプログラミング言語用のアルゴリズム}
+\end{center}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{{\large [手法] 速く解くための下準備}}
+\begin{block}{{\bf\small LU分解} \myfontsetting{13pt}{18pt}{(LU factorization)}\\
+\vspace{-5mm}
+\myfontsetting{10pt}{10pt}{※ 配列のインデックスが0から始まるプログラミング言語用}}
+    \myfontsetting{12pt}{14pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $A$
+        \ENSURE $L$, $A$ \hspace{2mm} \myfontsetting{8pt}{8pt}{[$A$ は実行後 $U$ になる]}
+        \STATE $L \leftarrow I$
+        \FOR{$k = 0,1,2, \dots, n-2$}
+        \FOR{$i = k+1,k+2, \dots, n-1$}
+        \STATE $m_{ik} \leftarrow a_{ik}/a_{kk}$ \hspace{2mm} \myfontsetting{8pt}{8pt}{[$a_{kk}\neq 0$ を仮定]}
+        \STATE $a_{ik} \leftarrow 0$
+        \FOR{$j = k+1,k+2, \dots, n-1$}
+        \STATE $a_{ij} \leftarrow a_{ij} - m_{ik}a_{kj}$
+        \ENDFOR
+        \STATE $l_{ik} \leftarrow m_{ik}$
+        \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{{\large [手法] 下準備の後の仕上げ}}
+\begin{block}{{\bf\small 前進代入}\myfontsetting{10pt}{12pt}{($\ell\ell$.~1--6)}{\bf\small ・後退代入}\myfontsetting{10pt}{12pt}{($\ell\ell$.~7--12)}\\
+\vspace{-5mm}
+\myfontsetting{10pt}{10pt}{※ 配列のインデックスが0から始まるプログラミング言語用}
+}
+    \myfontsetting{8pt}{10pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $L$, $U$, $\bm{b}$
+        \ENSURE $\bm{x}$
+        \STATE $y_0 \leftarrow b_0$ 
+        \FOR{$i = 1, \dots, n-1$}
+        \STATE $sum \leftarrow 0$
+        \FOR{$j = 0,1, \dots, i-1$}
+        \STATE $sum \leftarrow sum + l_{ij}y_j$
+        \ENDFOR
+        \STATE $y_i \leftarrow b_i - sum$
+        \ENDFOR
+        \STATE $x_{n-1}\leftarrow y_{n-1}/u_{n-1,n-1}$
+        \FOR{$i=n-2,\dots,0$}
+        \STATE $sum \leftarrow 0$
+        \FOR{$j=i+1,i+2,\dots,n-1$}
+        \STATE $sum \leftarrow sum + u_{ij}x_j$
+        \ENDFOR
+        \STATE $x_i \leftarrow \left( y_i - sum \right)/u_{ii}$
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{{\large [手法] 疎行列を扱うための安い方法}}
+\begin{block}{{\bf\small ガウス-ザイデル法} \myfontsetting{13pt}{18pt}{(Gauss-Seidel iteration)}\\
+\vspace{-5mm}
+\myfontsetting{10pt}{10pt}{※ 配列のインデックスが0から始まるプログラミング言語用}
+}
+    \myfontsetting{12pt}{14pt}{
+    \begin{algorithmic}[1]
+        \REQUIRE $A$, $k_\mathrm{max}$, $\bm{x}$ \myfontsetting{8pt}{8pt}{(初期ベクトル)} 
+        \ENSURE $\bm{x}$
+        \FOR{$k = 1,2, \dots, k_\mathrm{max}$}
+        \FOR{$i = 0,\dots, n-1$}
+        \STATE $sum = 0$
+        \FOR{$j = 0,1,\dots, i-1$}
+        \STATE $sum \leftarrow sum + a_{ij}x_j$
+        \ENDFOR
+        \FOR{$j = i+1, i+2, \dots, n-1$}
+        \STATE $sum \leftarrow sum + a_{ij}x_j$
+        \ENDFOR
+        \STATE $x_i = (-sum +b_i)/a_{ii}$
+        \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+    }
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
