@@ -2,8 +2,8 @@
 
 Beamer (プレゼンスライド作成用のLaTeXクラス) を使って作成した授業スライドのソースコード。
 
-- [講義スライドのPDFダウンロード (Overleaf)]()
-- [第5回授業の講義動画 (YouTube)]()
+- [講義スライドのPDFダウンロード (Overleaf)](https://www.overleaf.com/read/bcgxqjyzcqgp)
+- [第5回授業の講義動画 (YouTube)](https://youtu.be/9scwZmGZUeU)
 
 誤植や間違いを見つけた方は是非以下の方法でご連絡下さい。
 
